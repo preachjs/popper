@@ -1,12 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
-      #anchor {
-      }
-
       .container {
         display: flex;
         flex-direction: column;
@@ -29,6 +26,23 @@
       <button id="anchor">Options</button>
       <div id="menu">
         <h1>Content</h1>
+      </div>
+
+      <div style="margin-top: 200px">
+        <div>
+          Position
+          <button data-position="top">Top</button>
+          <button data-position="left">Left</button>
+          <button data-position="right">Right</button>
+          <button data-position="bottom">Bottom</button>
+        </div>
+
+        <div>
+          Align
+          <button data-align="start">Start</button>
+          <button data-align="center">Center</button>
+          <button data-align="end">End</button>
+        </div>
       </div>
     </div>
     <script type="module" src="./index.js"></script>
