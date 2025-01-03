@@ -30,7 +30,8 @@
     "build": "node build.js",
     "fix": "biome check --fix .",
     "prepare": "husky",
-    "publint": "publint"
+    "publint": "publint",
+    "prepublishOnly": "node build.js"
   },
   "nano-staged": {
     "*.{js,ts}": [
