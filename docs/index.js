@@ -24,4 +24,4 @@ alignedButtons.forEach(btn => {
   })
 })
 
-popper.move(currentPosition, currentAlign).offset(2).align()
+popper.move(currentPosition, currentAlign).offset(10).align()

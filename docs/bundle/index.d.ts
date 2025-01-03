@@ -1,7 +1,7 @@
 declare module '@preachjs/popper/index' {
   export function createPopper(anchor: HTMLElement, target: HTMLElement): Popper;
-  type Position = "top" | "left" | "right" | "bottom";
-  type Alignment = "center" | "start" | "end";
+  type Position = 'top' | 'left' | 'right' | 'bottom';
+  type Alignment = 'center' | 'start' | 'end';
   class Popper {
       anchor: HTMLElement;
       target: HTMLElement;
