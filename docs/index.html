@@ -3,46 +3,93 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.twind.style" crossorigin></script>
     <style>
-      .container {
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-        align-items: center;
-        justify-content: center;
-      }
-
       #menu {
         border: 1px solid black;
         border-radius: 5px;
-        width: 150px;
+        width: 250px;
         height: 100px;
         box-shadow: rgba(0, 0, 0, 0.12);
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <button id="anchor">Options</button>
+    <div class="flex flex-col h-[100vh] items-center justify-center">
+      <button
+        id="anchor"
+        class="bg-black border border-zinc-100 text-white h-10 min-w-[150px]"
+      >
+        Anchor
+      </button>
       <div id="menu">
-        <h1>Content</h1>
+        <h1>Popover</h1>
       </div>
 
       <div style="margin-top: 200px">
-        <div>
-          Position
-          <button data-position="top">Top</button>
-          <button data-position="left">Left</button>
-          <button data-position="right">Right</button>
-          <button data-position="bottom">Bottom</button>
+        <p class="mt-4">Position</p>
+        <div class="flex gap-4 items-center">
+          <button
+            class="flex items-center px-4 py-2 rounded-sm border cursor-pointer text-zinc-200 bg-zinc-900 border-zinc-900 hover:bg-zinc-800 active:border-zinc-400"
+            data-position="top"
+          >
+            Top
+          </button>
+          <button
+            class="flex items-center px-4 py-2 rounded-sm border cursor-pointer text-zinc-200 bg-zinc-900 border-zinc-900 hover:bg-zinc-800 active:border-zinc-400"
+            data-position="left"
+          >
+            Left
+          </button>
+          <button
+            class="flex items-center px-4 py-2 rounded-sm border cursor-pointer text-zinc-200 bg-zinc-900 border-zinc-900 hover:bg-zinc-800 active:border-zinc-400"
+            data-position="right"
+          >
+            Right
+          </button>
+          <button
+            class="flex items-center px-4 py-2 rounded-sm border cursor-pointer text-zinc-200 bg-zinc-900 border-zinc-900 hover:bg-zinc-800 active:border-zinc-400"
+            data-position="bottom"
+          >
+            Bottom
+          </button>
         </div>
 
-        <div>
-          Align
-          <button data-align="start">Start</button>
-          <button data-align="center">Center</button>
-          <button data-align="end">End</button>
+        <p class="mt-4">Align</p>
+        <div class="flex gap-4 items-center">
+          <button
+            class="flex items-center px-4 py-2 rounded-sm border cursor-pointer text-zinc-200 bg-zinc-900 border-zinc-900 hover:bg-zinc-800 active:border-zinc-400"
+            data-align="start"
+          >
+            Start
+          </button>
+          <button
+            class="flex items-center px-4 py-2 rounded-sm border cursor-pointer text-zinc-200 bg-zinc-900 border-zinc-900 hover:bg-zinc-800 active:border-zinc-400"
+            data-align="center"
+          >
+            Center
+          </button>
+          <button
+            class="flex items-center px-4 py-2 rounded-sm border cursor-pointer text-zinc-200 bg-zinc-900 border-zinc-900 hover:bg-zinc-800 active:border-zinc-400"
+            data-align="end"
+          >
+            End
+          </button>
         </div>
+      </div>
+      <div class="mt-10">
+        <label class="flex gap-2 items-center"
+          >Offset
+          <input
+            min="0"
+            max="100"
+            value="90"
+            step="10"
+            type="range"
+            id="offsetRange"
+            name="offset"
+          />
+        </label>
       </div>
     </div>
     <script type="module" src="./index.js"></script>
