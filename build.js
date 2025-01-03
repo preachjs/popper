@@ -18,11 +18,11 @@ await new Generator({
 await build({
   entryPoints: ['./src/index.ts'],
   bundle: true,
-  outdir: 'playground/bundle',
+  outdir: 'docs/bundle',
   format: 'esm',
 })
 
 await new Generator({
   entry: 'src/index.ts',
-  output: 'playground/bundle/index.d.ts',
+  output: 'docs/bundle/index.d.ts',
 }).generate()
