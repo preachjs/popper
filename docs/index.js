@@ -24,7 +24,10 @@ showArrowCheckbox.addEventListener('change', e => {
   } else {
     popper = createPopper(anchor, target)
   }
-  popper.align()
+  popper
+    .move(currentPosition, currentAlign)
+    .offset(Number(offsetRange.value))
+    .align()
 })
 
 const resizeObserver = new ResizeObserver(entries => {
