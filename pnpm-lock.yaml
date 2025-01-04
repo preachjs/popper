@@ -14,6 +14,9 @@ importers:
       '@biomejs/biome':
         specifier: ^1.9.4
         version: 1.9.4
+      chokidar:
+        specifier: ^4.0.3
+        version: 4.0.3
       esbuild:
         specifier: ^0.24.2
         version: 0.24.2

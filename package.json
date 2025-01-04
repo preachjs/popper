@@ -27,6 +27,7 @@
     "dist/*"
   ],
   "scripts": {
+    "dev": "node build.js -w",
     "build": "node build.js",
     "fix": "biome check --fix .",
     "prepare": "husky",
@@ -34,7 +35,7 @@
     "prepublishOnly": "node build.js"
   },
   "nano-staged": {
-    "*.{js,ts}": [
+    "*.{js,ts,html}": [
       "biome check --fix"
     ],
     "*.{md,json}": [
@@ -45,6 +46,7 @@
   "devDependencies": {
     "@barelyhuman/prettier-config": "^2.0.2",
     "@biomejs/biome": "^1.9.4",
+    "chokidar": "^4.0.3",
     "esbuild": "^0.24.2",
     "husky": "^9.1.7",
     "nano-staged": "^0.8.0",
