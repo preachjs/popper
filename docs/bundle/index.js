@@ -8,9 +8,13 @@ var Popper = class {
   _position = 'bottom'
   _alignment = 'center'
   _offset = 0
+  _plugins = []
   constructor(anchor, target) {
     this.anchor = anchor
     this.target = target
+  }
+  use(plug) {
+    this._plugins.push(plug)
   }
   move(position = 'bottom', alignment = 'center') {
     this._position = position
@@ -29,6 +33,12 @@ var Popper = class {
       this._alignment,
       this._position,
       this._offset
+    )
+    this._plugins.forEach(d =>
+      d(this.anchor, this.target, {
+        position: this._position,
+        alignment: this._alignment,
+      })
     )
   }
 }

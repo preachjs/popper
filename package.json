@@ -17,15 +17,15 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./arrow": {
+      "import": "./dist/arrow.js"
     },
     "./package.json": "./package.json"
   },
   "types": "./dist/index.d.ts",
-  "files": [
-    "dist/*"
-  ],
+  "files": ["dist/*"],
   "scripts": {
     "dev": "node build.js -w",
     "build": "node build.js",
@@ -35,12 +35,8 @@
     "prepublishOnly": "node build.js"
   },
   "nano-staged": {
-    "*.{js,ts,html}": [
-      "biome check --fix"
-    ],
-    "*.{md,json}": [
-      "prettier --write"
-    ]
+    "*.{js,ts,html,json}": ["biome check --fix"],
+    "*.{md}": ["prettier --write"]
   },
   "prettier": "@barelyhuman/prettier-config",
   "devDependencies": {
