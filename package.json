@@ -35,7 +35,7 @@
     "prepublishOnly": "node build.js"
   },
   "nano-staged": {
-    "*.{js,ts,html,json}": ["biome check --fix"],
+    "*.{js,ts,json}": ["biome check --fix"],
     "*.{md}": ["prettier --write"]
   },
   "prettier": "@barelyhuman/prettier-config",
