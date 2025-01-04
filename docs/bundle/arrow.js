@@ -1,20 +1,30 @@
 // src/arrow.ts
 var arrow = arrowEl => {
   return (anchor, target, config) => {
-    target.parentNode.childNodes.forEach(d => {
-      if (
-        d.ELEMENT_NODE &&
-        d instanceof HTMLElement &&
-        d.classList.contains('popper-arrow')
-      ) {
-        arrowEl = d
-      }
-    })
     if (!arrowEl) {
-      const arrow2 = document.createElement('span')
-      arrow2.classList.add('popper-arrow')
-      target.parentNode.appendChild(arrow2)
-      arrowEl = arrow2
+      target.parentNode?.childNodes.forEach(d => {
+        if (
+          d.ELEMENT_NODE &&
+          d instanceof HTMLElement &&
+          d.classList.contains('popper-arrow')
+        ) {
+          arrowEl = d
+        }
+      })
+      if (!arrowEl) {
+        const arrow2 = document.createElement('span')
+        arrow2.classList.add('popper-arrow')
+        target.parentNode?.appendChild(arrow2)
+        arrowEl = arrow2
+      }
+    } else {
+      if (
+        arrowEl.children[0].ELEMENT_NODE &&
+        arrowEl.children[0].nodeName === 'TEMPLATE' &&
+        'content' in arrowEl.children[0]
+      ) {
+        arrowEl.appendChild(arrowEl.children[0].content)
+      }
     }
     alignArrow(anchor, arrowEl, target, config)
   }
