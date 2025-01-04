@@ -22,18 +22,27 @@
       Anchor
     </button>
     <div id="arrow" class="m-0 p-0">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
-        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-        <path
-          d="M12 1.67a2.914 2.914 0 0 0 -2.492 1.403l-8.11 13.537a2.914 2.914 0 0 0 2.484 4.385h16.225a2.914 2.914 0 0 0 2.503 -4.371l-8.116 -13.546a2.917 2.917 0 0 0 -2.494 -1.408z" />
-      </svg>
+      <template>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path
+            d="M12 1.67a2.914 2.914 0 0 0 -2.492 1.403l-8.11 13.537a2.914 2.914 0 0 0 2.484 4.385h16.225a2.914 2.914 0 0 0 2.503 -4.371l-8.116 -13.546a2.917 2.917 0 0 0 -2.494 -1.408z" />
+        </svg>
+      </template>
     </div>
     <div id="menu" class="bg-black text-white flex items-center justify-center">
       <p>Popover</p>
     </div>
 
     <div style="margin-top: 200px">
-      <p class="mt-4">Position</p>
+      <p class="mt-4 font-semibold">Plugins</p>
+      <div>
+        <label for="">
+          <input defaultChecked="false" type="checkbox" name="showArrow" id="showArrow" />
+          Arrow
+        </label>
+      </div>
+      <p class="mt-4 font-semibold">Position</p>
       <div class="flex gap-4 items-center">
         <button
           class="flex items-center px-4 py-2 rounded-sm border cursor-pointer text-zinc-200 bg-zinc-900 border-zinc-900 hover:bg-zinc-800 active:border-zinc-400"
@@ -57,7 +66,7 @@
         </button>
       </div>
 
-      <p class="mt-4">Align</p>
+      <p class="mt-4 font-semibold">Align</p>
       <div class="flex gap-4 items-center">
         <button
           class="flex items-center px-4 py-2 rounded-sm border cursor-pointer text-zinc-200 bg-zinc-900 border-zinc-900 hover:bg-zinc-800 active:border-zinc-400"

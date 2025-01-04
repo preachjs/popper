@@ -1,6 +1,6 @@
 declare module '@preachjs/popper/arrow' {
   import type { Plugin } from '@preachjs/popper/index.js/index'
-  export const arrow: (arrowEl: HTMLElement) => Plugin
+  export const arrow: (arrowEl?: HTMLElement) => Plugin
 }
 declare module '@preachjs/popper/index' {
   export function createPopper(anchor: HTMLElement, target: HTMLElement): Popper

@@ -4,16 +4,28 @@ import { createPopper } from './bundle/index.js'
 const anchor = document.getElementById('anchor')
 const target = document.getElementById('menu')
 const arrowEl = document.getElementById('arrow')
+const showArrowCheckbox = document.getElementById('showArrow')
 
-const popper = createPopper(anchor, target)
-popper.use(arrow(arrowEl))
-
+let popper = createPopper(anchor, target)
 const positionButtons = document.querySelectorAll('[data-position]')
 const alignedButtons = document.querySelectorAll('[data-align]')
 const offsetRange = document.querySelector('#offsetRange')
 
 let currentPosition = 'bottom'
 let currentAlign = 'center'
+
+if (showArrowCheckbox.checked) {
+  popper.use(arrow(arrowEl))
+}
+
+showArrowCheckbox.addEventListener('change', e => {
+  if (e.target.checked) {
+    popper.use(arrow(arrowEl))
+  } else {
+    popper = createPopper(anchor, target)
+  }
+  popper.align()
+})
 
 const resizeObserver = new ResizeObserver(entries => {
   let lastEntry
@@ -31,6 +43,10 @@ const resizeObserver = new ResizeObserver(entries => {
     }
     if (!lastEntry) {
       lastEntry = entry
+      popper
+        .move(currentPosition, currentAlign)
+        .offset(Number(offsetRange.value))
+        .align()
     }
   }
 })

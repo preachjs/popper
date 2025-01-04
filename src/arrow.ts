@@ -1,22 +1,35 @@
 import type { Plugin, PluginOptions } from './index.js'
 
-export const arrow = (arrowEl: HTMLElement): Plugin => {
+export const arrow = (arrowEl?: HTMLElement): Plugin => {
   return (anchor, target, config) => {
-    target.parentNode.childNodes.forEach(d => {
-      if (
-        d.ELEMENT_NODE &&
-        d instanceof HTMLElement &&
-        d.classList.contains('popper-arrow')
-      ) {
-        arrowEl = d
-      }
-    })
-
     if (!arrowEl) {
-      const arrow = document.createElement('span')
-      arrow.classList.add('popper-arrow')
-      target.parentNode.appendChild(arrow)
-      arrowEl = arrow
+      // Find if one was already created
+      target.parentNode?.childNodes.forEach(d => {
+        if (
+          d.ELEMENT_NODE &&
+          d instanceof HTMLElement &&
+          d.classList.contains('popper-arrow')
+        ) {
+          arrowEl = d
+        }
+      })
+
+      // Create one if finding it failed
+      if (!arrowEl) {
+        const arrow = document.createElement('span')
+        arrow.classList.add('popper-arrow')
+        target.parentNode?.appendChild(arrow)
+        arrowEl = arrow
+      }
+    } else {
+      // create the element using a template subset
+      if (
+        arrowEl.children[0].ELEMENT_NODE &&
+        arrowEl.children[0].nodeName === 'TEMPLATE' &&
+        'content' in arrowEl.children[0]
+      ) {
+        arrowEl.appendChild(arrowEl.children[0].content as Node)
+      }
     }
 
     alignArrow(anchor, arrowEl, target, config)
