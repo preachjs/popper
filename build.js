@@ -1,4 +1,4 @@
-import path, { join } from 'node:path'
+import path, { basename, extname, join } from 'node:path'
 import { parseArgs } from 'node:util'
 import chokidar from 'chokidar'
 import { analyzeMetafile, context } from 'esbuild'
@@ -16,13 +16,14 @@ const flag = parseArgs({
 })
 
 const { watch } = flag.values
-await createBuilder('src/index.ts', 'dist')
-await createBuilder('src/index.ts', 'docs/bundle', 'docs')
+const input = ['src/index.ts', 'src/arrow.ts']
+await createBuilder(input, 'dist')
+await createBuilder(input, 'docs/bundle', 'docs')
 
 async function createBuilder(input, output, serveDir) {
   const watchGraph = []
   const ctx = await context({
-    entryPoints: [input],
+    entryPoints: [].concat(input),
     bundle: true,
     outdir: output,
     format: 'esm',
@@ -43,9 +44,13 @@ async function createBuilder(input, output, serveDir) {
   async function generateBundle() {
     const buildOut = await ctx.rebuild()
     console.log(await analyzeMetafile(buildOut.metafile))
+    const baseFile = input[0]
     await new Generator({
-      entry: input,
-      output: path.join(output, 'index.d.ts'),
+      entry: baseFile,
+      output: path.join(
+        output,
+        basename(baseFile).replace(extname(baseFile), '.d.ts')
+      ),
     }).generate()
   }
 

@@ -2,6 +2,17 @@ export function createPopper(anchor: HTMLElement, target: HTMLElement) {
   return new Popper(anchor, target)
 }
 
+export type PluginOptions = {
+  position: Position
+  alignment: Alignment
+}
+
+export type Plugin = (
+  anchor: HTMLElement,
+  target: HTMLElement,
+  options: PluginOptions
+) => void
+
 type Position = 'top' | 'left' | 'right' | 'bottom'
 type Alignment = 'center' | 'start' | 'end'
 
@@ -11,10 +22,15 @@ class Popper {
   _position: Position = 'bottom'
   _alignment: Alignment = 'center'
   _offset: number = 0
+  _plugins: Plugin[] = []
 
   constructor(anchor: HTMLElement, target: HTMLElement) {
     this.anchor = anchor
     this.target = target
+  }
+
+  use(plug: Plugin) {
+    this._plugins.push(plug)
   }
 
   move(position: Position = 'bottom', alignment: Alignment = 'center') {
@@ -36,6 +52,12 @@ class Popper {
       this._alignment,
       this._position,
       this._offset
+    )
+    this._plugins.forEach(d =>
+      d(this.anchor, this.target, {
+        position: this._position,
+        alignment: this._alignment,
+      })
     )
   }
 }
