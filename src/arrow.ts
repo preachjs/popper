@@ -1,76 +1,92 @@
-import type { Plugin, PluginOptions } from './index.js'
+import type { ElementPosition, Plugin, PluginOptions } from './index.js'
 
-export const arrow = (arrowEl?: HTMLElement): Plugin => {
-  return (anchor, target, config) => {
-    if (!arrowEl) {
-      // Find if one was already created
-      target.parentNode?.childNodes.forEach(d => {
-        if (
-          d.ELEMENT_NODE &&
-          d instanceof HTMLElement &&
-          d.classList.contains('popper-arrow')
-        ) {
-          arrowEl = d
-        }
-      })
-
-      // Create one if finding it failed
-      if (!arrowEl) {
-        const arrow = document.createElement('span')
-        arrow.classList.add('popper-arrow')
-        target.parentNode?.appendChild(arrow)
-        arrowEl = arrow
-      }
-    } else {
-      // create the element using a template subset
-      if (
-        arrowEl.children[0].ELEMENT_NODE &&
-        arrowEl.children[0].nodeName === 'TEMPLATE' &&
-        'content' in arrowEl.children[0]
-      ) {
-        arrowEl.appendChild(arrowEl.children[0].content as Node)
-      }
-    }
-
-    alignArrow(anchor, arrowEl, target, config)
+declare module './index.js' {
+  interface Popper {
+    // toggle arrow appearance
+    toggleArrow(bool: boolean): void
   }
 }
 
-function alignArrow(
-  anchor: HTMLElement,
+export const arrow = (arrowEl?: HTMLElement): Plugin => {
+  let visible = 1
+  let finalPosition: ElementPosition
+  return {
+    setup(popper, anchor, target) {
+      popper.decorate('toggleArrow', (bool: boolean) => {
+        if (bool) {
+          // reverse of the original logic allow the below
+          // to automatically update the needed variables
+          visible = bool ? 0 : 1
+        }
+        if (visible) {
+          visible = 0
+          delete arrowEl.dataset.popperArrowVisible
+        } else {
+          visible = 1
+          arrowEl.dataset.popperArrowVisible = String(1)
+        }
+      })
+    },
+    onAlign(anchor, target, config) {
+      finalPosition = undefined
+      if (!visible) return { anchor, target }
+      const {
+        arrow: arrowPosition,
+        target: targetPosition,
+        anchor: anchorPosition,
+      } = computeWithArrowPositions(anchor, target, arrowEl, config)
+      finalPosition = arrowPosition
+      return { target: targetPosition, anchor: anchorPosition }
+    },
+    onAlignEnd() {
+      console.log({ finalPosition })
+      if (!finalPosition) return
+      arrowEl.style.position = 'absolute'
+      arrowEl.style.transform = finalPosition.transform as string
+      arrowEl.style.top = finalPosition.top + 'px'
+      arrowEl.style.left = finalPosition.left + 'px'
+    },
+  }
+}
+
+function computeWithArrowPositions(
+  anchorBox: ElementPosition,
+  targetBox: ElementPosition,
   arrowEl: HTMLElement,
-  target: HTMLElement,
   config: PluginOptions
 ) {
-  const anchorBox = anchor.getBoundingClientRect()
   const arrowBox = arrowEl.getBoundingClientRect()
-  const targetBox = target.getBoundingClientRect()
 
-  arrowEl.style.position = 'absolute'
+  const targetPosition = {
+    ...targetBox,
+  }
+  const arrowPosition: ElementPosition = {
+    ...arrowBox,
+  }
 
   switch (config.position) {
     case 'top': {
-      target.style.top = target.offsetTop - arrowBox.height + 'px'
-      arrowEl.style.top = target.offsetTop + targetBox.height + 'px'
-      arrowEl.style.transform = 'rotate(180deg)'
+      targetPosition.top = targetPosition.top - arrowBox.height
+      arrowPosition.top = targetPosition.top + targetBox.height
+      arrowPosition.transform = 'rotate(180deg)'
       break
     }
     case 'bottom': {
-      target.style.top = target.offsetTop + arrowBox.height + 'px'
-      arrowEl.style.top = target.offsetTop - arrowBox.height + 'px'
-      arrowEl.style.transform = 'rotate(0deg)'
+      targetPosition.top = targetPosition.top + arrowBox.height
+      arrowPosition.top = targetPosition.top - arrowBox.height
+      arrowPosition.transform = 'rotate(0deg)'
       break
     }
     case 'left': {
-      target.style.left = target.offsetLeft - arrowBox.width + 'px'
-      arrowEl.style.left = target.offsetLeft + targetBox.width + 'px'
-      arrowEl.style.transform = 'rotate(90deg)'
+      targetPosition.left = targetPosition.left - arrowBox.width
+      arrowPosition.left = targetPosition.left + targetBox.width
+      arrowPosition.transform = 'rotate(90deg)'
       break
     }
     case 'right': {
-      target.style.left = target.offsetLeft + arrowBox.width + 'px'
-      arrowEl.style.left = target.offsetLeft - arrowBox.width + 'px'
-      arrowEl.style.transform = 'rotate(270deg)'
+      targetPosition.left = targetPosition.left + arrowBox.width
+      arrowPosition.left = targetPosition.left - arrowBox.width
+      arrowPosition.transform = 'rotate(270deg)'
       break
     }
   }
@@ -78,34 +94,34 @@ function alignArrow(
   switch (config.alignment) {
     case 'start': {
       if (config.position === 'top' || config.position === 'bottom') {
-        arrowEl.style.left = target.offsetLeft + 'px'
+        arrowPosition.left = targetPosition.left
       }
       if (config.position === 'left' || config.position === 'right') {
-        arrowEl.style.top = target.offsetTop + 'px'
+        arrowPosition.top = targetBox.top
       }
       break
     }
     case 'center': {
       if (config.position === 'top' || config.position === 'bottom') {
-        arrowEl.style.left =
-          anchor.offsetLeft + (anchorBox.width / 2 - arrowBox.width / 2) + 'px'
+        arrowPosition.left =
+          anchorBox.left + (anchorBox.width / 2 - arrowBox.width / 2)
       }
       if (config.position === 'left' || config.position === 'right') {
-        arrowEl.style.top =
-          anchor.offsetTop + (anchorBox.height / 2 - arrowBox.height / 2) + 'px'
+        arrowPosition.top =
+          anchorBox.top + (anchorBox.height / 2 - arrowBox.height / 2)
       }
       break
     }
     case 'end': {
       if (config.position === 'top' || config.position === 'bottom') {
-        arrowEl.style.left =
-          target.offsetLeft + targetBox.width - arrowBox.width + 'px'
+        arrowPosition.left =
+          targetPosition.left + targetBox.width - arrowBox.width
       }
       if (config.position === 'left' || config.position === 'right') {
-        arrowEl.style.top =
-          anchor.offsetTop + (anchorBox.height - arrowBox.height) + 'px'
+        arrowPosition.top = anchorBox.top + (anchorBox.height - arrowBox.height)
       }
       break
     }
   }
+  return { arrow: arrowPosition, anchor: anchorBox, target: targetPosition }
 }

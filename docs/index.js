@@ -14,26 +14,13 @@ const offsetRange = document.querySelector('#offsetRange')
 let currentPosition = 'bottom'
 let currentAlign = 'center'
 
-if (showArrowCheckbox.checked) {
-  popper.use(arrow(arrowEl))
-}
+popper.use(arrow(arrowEl))
+
+popper.toggleArrow(showArrowCheckbox.checked)
 
 showArrowCheckbox.addEventListener('change', e => {
-  if (e.target.checked) {
-    popper.use(arrow(arrowEl))
-  } else {
-    popper = createPopper(anchor, target)
-    // Remove everything non-template
-    Array.from(arrowEl.children).forEach(d => {
-      if (d.nodeName.toLowerCase() !== 'template') {
-        arrowEl.removeChild(d)
-      }
-    })
-  }
-  popper
-    .move(currentPosition, currentAlign)
-    .offset(Number(offsetRange.value))
-    .align()
+  popper.toggleArrow(e.target.checked)
+  popper.align()
 })
 
 const resizeObserver = new ResizeObserver(entries => {

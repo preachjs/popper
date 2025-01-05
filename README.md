@@ -15,7 +15,7 @@
 
 - Tiny
   - Core is just under [3kb](https://sizesnap.barelyhuman.dev/@preachjs/popper)
-- 0 deps
+- 0 dependencies
 - Low Level
 
 ## Usage

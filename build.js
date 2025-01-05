@@ -16,8 +16,12 @@ const flag = parseArgs({
 
 const { watch } = flag.values
 const input = ['src/index.ts', 'src/arrow.ts']
-await createBuilder(input, 'dist')
-await createBuilder(input, 'docs/bundle', 'docs')
+await createBuilder(input, 'dist').catch(err => {
+  console.error(err)
+})
+await createBuilder(input, 'docs/bundle', 'docs').catch(err =>
+  console.error(err)
+)
 
 async function createBuilder(input, output, serveDir) {
   const watchGraph = []
