@@ -1,42 +1,17 @@
-export type PluginOptions = {
-  position: Position
-  alignment: Alignment
-}
+import type {
+  Alignment,
+  ElementPosition,
+  Plugin,
+  Popper,
+  Position,
+} from './types'
 
-export type ElementPosition = {
-  top: number
-  left: number
-  height: number
-  width: number
-} & Record<string, unknown>
+export type * from './types'
 
-export type Plugin = {
-  setup?: (popper: Popper, anchor: HTMLElement, target: HTMLElement) => void
-  onAlign?: (
-    anchor: ElementPosition,
-    target: ElementPosition,
-    options: PluginOptions,
-    popper: Popper
-  ) => {
-    anchor: ElementPosition
-    target: ElementPosition
-  }
-  onAlignEnd?: () => void
-}
-
-type Position = 'top' | 'left' | 'right' | 'bottom'
-type Alignment = 'center' | 'start' | 'end'
+import { boxToElementPosition } from './lib/boxToElementPosition.js'
 
 export function createPopper(anchor: HTMLElement, target: HTMLElement) {
   return new _Popper(anchor, target) as unknown as Popper
-}
-
-export interface Popper {
-  use(plug: Plugin): void
-  move(position?: Position, alignment?: Alignment): Popper
-  decorate(name: string, fn: (...args: any[]) => void): Popper
-  offset(num: number): Popper
-  align(): void
 }
 
 // @ts-expect-error plugins are in the same folder
@@ -85,20 +60,12 @@ class _Popper implements Popper {
   align() {
     const anchorBox = this.anchor.getBoundingClientRect()
     const targetBox = this.target.getBoundingClientRect()
+    const anchorElmPosition = boxToElementPosition(anchorBox)
+
     this.target.style.position = 'absolute'
     const targetPosition = _computeTargetPosition(
-      {
-        left: anchorBox.left,
-        top: anchorBox.top,
-        height: anchorBox.height,
-        width: anchorBox.width,
-      },
-      {
-        left: targetBox.left,
-        top: targetBox.top,
-        height: targetBox.height,
-        width: targetBox.width,
-      },
+      anchorElmPosition,
+      boxToElementPosition(targetBox),
       this._alignment,
       this._position,
       this._offset
@@ -117,12 +84,7 @@ class _Popper implements Popper {
               this as unknown as Popper
             ),
       {
-        anchor: {
-          left: anchorBox.left,
-          top: anchorBox.top,
-          height: anchorBox.height,
-          width: anchorBox.width,
-        },
+        anchor: anchorElmPosition,
         target: targetPosition,
       }
     )

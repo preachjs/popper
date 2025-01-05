@@ -1,4 +1,4 @@
-import type { ElementPosition, Plugin, PluginOptions } from './index.js'
+import type { ElementPosition, Plugin, PluginOptions } from './types.js'
 
 declare module '@preachjs/popper' {
   interface Popper {

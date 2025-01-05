@@ -31,6 +31,12 @@ async function createBuilder(input, output, serveDir) {
     outdir: output,
     format: 'esm',
     mangleProps: /^_/,
+    mangleCache: {
+      _position: '_pos',
+      _alignment: '_a',
+      _plugins: '_p',
+      _offset: '_o',
+    },
     minifySyntax: true,
     metafile: true,
     plugins: [
