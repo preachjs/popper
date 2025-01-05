@@ -31,6 +31,7 @@
     "build": "node build.js",
     "fix": "biome check --fix .",
     "prepare": "husky",
+    "next": "bumpp",
     "publint": "publint",
     "prepublishOnly": "node build.js"
   },
@@ -42,6 +43,7 @@
   "devDependencies": {
     "@barelyhuman/prettier-config": "^2.0.2",
     "@biomejs/biome": "^1.9.4",
+    "bumpp": "^9.9.2",
     "chokidar": "^4.0.3",
     "esbuild": "^0.24.2",
     "husky": "^9.1.7",
