@@ -6,6 +6,9 @@
   "bugs": {
     "url": "https://github.com/preachjs/popper/issues"
   },
+  "repository": {
+    "url": "git+https://github.com/preachjs/popper.git"
+  },
   "publishConfig": {
     "access": "public"
   },
