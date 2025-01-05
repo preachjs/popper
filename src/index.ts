@@ -34,7 +34,7 @@ export function createPopper(anchor: HTMLElement, target: HTMLElement) {
 export interface Popper {
   use(plug: Plugin): void
   move(position?: Position, alignment?: Alignment): Popper
-  decorate(name: string, fn: (...args: unknown[]) => void): Popper
+  decorate(name: string, fn: (...args: any[]) => void): Popper
   offset(num: number): Popper
   align(): void
 }
@@ -66,10 +66,10 @@ class _Popper implements Popper {
     return this as unknown as Popper
   }
 
-  decorate(name: string, fn: (...args: unknown[]) => void) {
+  decorate(name: string, fn: (...args: any[]) => void) {
     if (Object.prototype.hasOwnProperty.call(this, name)) {
       console.warn(`tried to define ${name} again`)
-      return
+      return this as unknown as Popper
     }
     Object.defineProperty(this, name, {
       value: fn,
