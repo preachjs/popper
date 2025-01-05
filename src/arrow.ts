@@ -1,6 +1,6 @@
 import type { ElementPosition, Plugin, PluginOptions } from './index.js'
 
-declare module './index.js' {
+declare module '@preachjs/popper' {
   interface Popper {
     // toggle arrow appearance
     toggleArrow(bool: boolean): void

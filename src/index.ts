@@ -1,7 +1,3 @@
-export function createPopper(anchor: HTMLElement, target: HTMLElement) {
-  return new Popper(anchor, target)
-}
-
 export type PluginOptions = {
   position: Position
   alignment: Alignment
@@ -31,7 +27,22 @@ export type Plugin = {
 type Position = 'top' | 'left' | 'right' | 'bottom'
 type Alignment = 'center' | 'start' | 'end'
 
-export class Popper {
+export function createPopper(anchor: HTMLElement, target: HTMLElement) {
+  return new _Popper(anchor, target) as unknown as Popper
+}
+
+export interface Popper {
+  use(plug: Plugin): void
+  move(position?: Position, alignment?: Alignment): Popper
+  decorate(name: string, fn: (...args: unknown[]) => void): Popper
+  offset(num: number): Popper
+  align(): void
+}
+
+// @ts-expect-error plugins are in the same folder
+// that'll cause method missing errors even when plugins
+// aren't imported
+class _Popper implements Popper {
   anchor: HTMLElement
   target: HTMLElement
   _position: Position = 'bottom'
@@ -46,13 +57,13 @@ export class Popper {
 
   use(plug: Plugin) {
     this._plugins.push(plug)
-    plug.setup?.(this, this.anchor, this.target)
+    plug.setup?.(this as unknown as Popper, this.anchor, this.target)
   }
 
   move(position: Position = 'bottom', alignment: Alignment = 'center') {
     this._position = position
     this._alignment = alignment
-    return this
+    return this as unknown as Popper
   }
 
   decorate(name: string, fn: (...args: unknown[]) => void) {
@@ -63,11 +74,12 @@ export class Popper {
     Object.defineProperty(this, name, {
       value: fn,
     })
+    return this as unknown as Popper
   }
 
   offset(num: number) {
     this._offset = num
-    return this
+    return this as unknown as Popper
   }
 
   align() {
@@ -102,7 +114,7 @@ export class Popper {
                 alignment: this._alignment,
                 position: this._position,
               },
-              this
+              this as unknown as Popper
             ),
       {
         anchor: {

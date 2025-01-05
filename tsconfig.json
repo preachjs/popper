@@ -4,7 +4,11 @@
     "moduleResolution": "bundler",
     "declaration": true,
     "outDir": "dist",
-    "rootDir": "."
+    "rootDir": "./src",
+    "baseUrl": ".",
+    "paths": {
+      "@preachjs/popper": ["./src"]
+    }
   },
   "include": ["src/*"]
 }
