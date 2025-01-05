@@ -39,7 +39,7 @@ jobs:
       - name: Install dependencies
         run: pnpm i --frozen-lockfile
         working-directory: ${{ env.BUILD_PATH }}
-      - name: Build with Astro
+      - name: Build
         run: |
           pnpm build
         working-directory: ${{ env.BUILD_PATH }}
