@@ -21,7 +21,7 @@
 
 ### Installation
 
-> [!NOTE]:
+> [!NOTE]
 >
 > The module is **ESM Only**
 
