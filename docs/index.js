@@ -11,8 +11,10 @@ const positionButtons = document.querySelectorAll('[data-position]')
 const alignedButtons = document.querySelectorAll('[data-align]')
 const offsetRange = document.querySelector('#offsetRange')
 
-let currentPosition = 'bottom'
-let currentAlign = 'center'
+let currentPosition = document.querySelector('[data-position].active').dataset
+  .position
+let currentAlign = document.querySelector('[data-align].active').dataset
+  .position
 
 popper.use(arrow(arrowEl))
 
@@ -57,6 +59,8 @@ offsetRange.addEventListener('change', e => {
 
 positionButtons.forEach(btn => {
   btn.addEventListener('click', () => {
+    positionButtons.forEach(d => d.classList.remove('active'))
+    btn.classList.add('active')
     popper
       .move(btn.dataset.position, currentAlign)
       .offset(Number(offsetRange.value))
@@ -67,6 +71,8 @@ positionButtons.forEach(btn => {
 
 alignedButtons.forEach(btn => {
   btn.addEventListener('click', () => {
+    alignedButtons.forEach(d => d.classList.remove('active'))
+    btn.classList.add('active')
     popper
       .move(currentPosition, btn.dataset.align)
       .offset(Number(offsetRange.value))

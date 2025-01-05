@@ -5,103 +5,65 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.twind.style" crossorigin></script>
-  <style>
-    #menu {
-      border-radius: 5px;
-      width: 250px;
-      height: 100px;
-      box-shadow: rgba(0, 0, 0, 0.12);
-      transition: 250ms ease-in-out all;
-    }
-
-    #arrow {
-        height:0px;
-        opacity: 0;
-        transition: 250ms ease-in-out all;
-    }
-
-    #arrow[data-popper-arrow-visible]{
-        height:auto;
-        opacity: 1;
-    }
-  </style>
+  <link rel="stylesheet" href="/styles.css" />
 </head>
 
 <body>
-    <div class="h-10">
-        <nav class="p-4">
-            <ul class="justify-end flex items-center gap-2">
-                <li>
-                    <a class="inline-block text-gray-600 hover:text-black underline underline-offset-4" target="_blank" rel="noopener noreferrer" href="https://github.com/preachjs/popper#readme">Docs</a>
-                </li>
-            </ul>
-        </nav>
+  <header>
+    <div class="overlay">
+      <div class="home">
+        <a href="/">@preachjs/popper</a>
+      </div>
+      <nav>
+        <a href="https://github.com/preachjs/popper/#readme.md" target="_blank">docs ↗</a>
+        <a href="https://github.com/preachjs/popper" target="_blank">source ↗</a>
+      </nav>
     </div>
-  <div class="flex flex-col h-[100vh] items-center justify-center">
-    <button id="anchor" class="bg-black border border-zinc-100 text-white h-10 min-w-[150px]">
+  </header>
+  <section>
+      <pre class="code-block"><code>npm i <strong>@preachjs/popper</strong></code></pre>
+  </section>
+  <div class="flex flex-col h-[40dvh] items-center justify-center">
+    <button id="anchor" class="bg-black rounded-sm border border-zinc-100 text-white h-10 min-w-[150px]">
       Anchor
     </button>
-    <div id="arrow" class="m-0 p-0">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
-          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-          <path
-            d="M12 1.67a2.914 2.914 0 0 0 -2.492 1.403l-8.11 13.537a2.914 2.914 0 0 0 2.484 4.385h16.225a2.914 2.914 0 0 0 2.503 -4.371l-8.116 -13.546a2.917 2.917 0 0 0 -2.494 -1.408z" />
-        </svg>
+    <div id="arrow" class="m-0 p-0 text-zinc-600">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path
+          d="M12 1.67a2.914 2.914 0 0 0 -2.492 1.403l-8.11 13.537a2.914 2.914 0 0 0 2.484 4.385h16.225a2.914 2.914 0 0 0 2.503 -4.371l-8.116 -13.546a2.917 2.917 0 0 0 -2.494 -1.408z" />
+      </svg>
     </div>
-    <div id="menu" class="bg-black text-white flex items-center justify-center">
+    <div id="menu" class="z-10 shadow rounded-sm bg-zinc-600 text-zinc-200 p-10 w-[250px] flex items-center justify-center">
       <p>Popover</p>
     </div>
+  </div>
+  <div class="w-full fixed bottom-0 left-0 right-0 bg-zinc-100 text-zinc-800 p-4 rounded-md">
+    <div>
+      <h2 class="border-b border-b-zinc-200 pb-2 font-semibold">
+        Control Panel
+      </h2>
+    </div>
+    <p class="mt-4 font-semibold">Plugins</p>
+    <div>
+      <label for="showArrow">
+        <input defaultChecked="false" type="checkbox" name="showArrow" id="showArrow" />
+        Arrow
+      </label>
+    </div>
+    <p class="mt-4 font-semibold">Position</p>
+    <div class="flex gap-4 items-center">
+      <button class="btn" data-position="top">Top</button>
+      <button class="btn" data-position="left">Left</button>
+      <button class="btn" data-position="right">Right</button>
+      <button class="btn active" data-position="bottom">Bottom</button>
+    </div>
 
-    <div style="margin-top: 200px">
-      <p class="mt-4 font-semibold">Plugins</p>
-      <div>
-        <label for="">
-          <input defaultChecked="false" type="checkbox" name="showArrow" id="showArrow" />
-          Arrow
-        </label>
-      </div>
-      <p class="mt-4 font-semibold">Position</p>
-      <div class="flex gap-4 items-center">
-        <button
-          class="flex items-center px-4 py-2 rounded-sm border cursor-pointer text-zinc-200 bg-zinc-900 border-zinc-900 hover:bg-zinc-800 active:border-zinc-400"
-          data-position="top">
-          Top
-        </button>
-        <button
-          class="flex items-center px-4 py-2 rounded-sm border cursor-pointer text-zinc-200 bg-zinc-900 border-zinc-900 hover:bg-zinc-800 active:border-zinc-400"
-          data-position="left">
-          Left
-        </button>
-        <button
-          class="flex items-center px-4 py-2 rounded-sm border cursor-pointer text-zinc-200 bg-zinc-900 border-zinc-900 hover:bg-zinc-800 active:border-zinc-400"
-          data-position="right">
-          Right
-        </button>
-        <button
-          class="flex items-center px-4 py-2 rounded-sm border cursor-pointer text-zinc-200 bg-zinc-900 border-zinc-900 hover:bg-zinc-800 active:border-zinc-400"
-          data-position="bottom">
-          Bottom
-        </button>
-      </div>
-
-      <p class="mt-4 font-semibold">Align</p>
-      <div class="flex gap-4 items-center">
-        <button
-          class="flex items-center px-4 py-2 rounded-sm border cursor-pointer text-zinc-200 bg-zinc-900 border-zinc-900 hover:bg-zinc-800 active:border-zinc-400"
-          data-align="start">
-          Start
-        </button>
-        <button
-          class="flex items-center px-4 py-2 rounded-sm border cursor-pointer text-zinc-200 bg-zinc-900 border-zinc-900 hover:bg-zinc-800 active:border-zinc-400"
-          data-align="center">
-          Center
-        </button>
-        <button
-          class="flex items-center px-4 py-2 rounded-sm border cursor-pointer text-zinc-200 bg-zinc-900 border-zinc-900 hover:bg-zinc-800 active:border-zinc-400"
-          data-align="end">
-          End
-        </button>
-      </div>
+    <p class="mt-4 font-semibold">Align</p>
+    <div class="flex gap-4 items-center">
+      <button class="btn" data-align="start">Start</button>
+      <button class="btn active" data-align="center">Center</button>
+      <button class="btn" data-align="end">End</button>
     </div>
     <div class="mt-10">
       <label class="flex gap-2 items-center">Offset
@@ -111,4 +73,5 @@
   </div>
   <script type="module" src="./index.js"></script>
 </body>
+
 </html>

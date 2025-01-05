@@ -1,0 +1,98 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  padding: 1em;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    avenir next,
+    avenir,
+    segoe ui,
+    helvetica neue,
+    helvetica,
+    Cantarell,
+    Ubuntu,
+    roboto,
+    noto,
+    arial,
+    sans-serif;
+}
+
+a {
+  color: black;
+}
+
+/* Header */
+header a {
+  text-decoration: none;
+  font-size: 1.125em;
+}
+
+header a:hover {
+  text-decoration: underline;
+}
+
+header .overlay,
+nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+header {
+  background: white;
+  height: 52px;
+}
+
+.home {
+  font-weight: bold;
+  margin-right: 3ch;
+}
+
+nav {
+  gap: 1.5ch;
+}
+
+nav a {
+  font-weight: normal;
+  white-space: nowrap;
+}
+
+/* Install code block */
+.code-block {
+  white-space: pre-wrap;
+  background: #f1f3f5;
+  padding: 1em;
+  border-radius: 4px;
+}
+
+#arrow {
+  height: 0px;
+  opacity: 0;
+  transition: 250ms ease-in-out all;
+}
+
+#arrow[data-popper-arrow-visible] {
+  height: auto;
+  opacity: 1;
+}
+
+/* custom elements */
+.btn {
+  padding: 4px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #d4d4d8;
+  border-radius: 6px;
+}
+
+.btn.active {
+  background: #27272a;
+  color: #efefef;
+}
