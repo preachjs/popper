@@ -23,6 +23,12 @@ showArrowCheckbox.addEventListener('change', e => {
     popper.use(arrow(arrowEl))
   } else {
     popper = createPopper(anchor, target)
+    // Remove everything non-template
+    Array.from(arrowEl.children).forEach(d => {
+      if (d.nodeName.toLowerCase() !== 'template') {
+        arrowEl.removeChild(d)
+      }
+    })
   }
   popper
     .move(currentPosition, currentAlign)
