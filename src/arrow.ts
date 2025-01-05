@@ -14,7 +14,7 @@ export const arrow = (arrowEl: HTMLElement): Plugin => {
     throw new Error('[popper] Expected arrow element to be passed')
   }
   return {
-    setup(popper, anchor, target) {
+    setup(popper) {
       popper.decorate('toggleArrow', (bool: boolean) => {
         if (bool) {
           // reverse of the original logic allow the below
