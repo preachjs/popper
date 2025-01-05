@@ -1,6 +1,6 @@
 {
   "name": "@preachjs/popper",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "micro positioning library",
   "homepage": "https://github.com/preachjs/popper",
   "bugs": {
