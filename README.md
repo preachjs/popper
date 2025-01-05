@@ -8,6 +8,7 @@
     - [Plugins](#plugins)
       - [Arrow](#arrow)
   - [About](#about)
+  - [FAQ](#faq)
   - [License](#license)
 
 ## Highlights
