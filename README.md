@@ -15,7 +15,7 @@
 
 - Tiny
   - Core is just under [3kb](https://sizesnap.barelyhuman.dev/@preachjs/popper)
-- 0 deps
+- 0 dependencies
 - Low Level
 
 ## Usage
@@ -58,6 +58,11 @@ const arrowElement = document.getElementById('arrow')
 
 const popper = createPopper(anchor, popover)
 popper.use(arrow(arrowElement))
+
+popper.toggleArrow()
+// or
+// popper.toggleArrow(true) - will add a `data-popper-arrow-visible` property on the passed arrow element
+// popper.toggleArrow(false)
 
 // remaining code
 

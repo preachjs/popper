@@ -3,7 +3,12 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "declaration": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "rootDir": "./src",
+    "baseUrl": ".",
+    "paths": {
+      "@preachjs/popper": ["./src"]
+    }
   },
   "include": ["src/*"]
 }

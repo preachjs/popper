@@ -1,22 +1,48 @@
-export function createPopper(anchor: HTMLElement, target: HTMLElement) {
-  return new Popper(anchor, target)
-}
-
 export type PluginOptions = {
   position: Position
   alignment: Alignment
 }
 
-export type Plugin = (
-  anchor: HTMLElement,
-  target: HTMLElement,
-  options: PluginOptions
-) => void
+export type ElementPosition = {
+  top: number
+  left: number
+  height: number
+  width: number
+} & Record<string, unknown>
+
+export type Plugin = {
+  setup?: (popper: Popper, anchor: HTMLElement, target: HTMLElement) => void
+  onAlign?: (
+    anchor: ElementPosition,
+    target: ElementPosition,
+    options: PluginOptions,
+    popper: Popper
+  ) => {
+    anchor: ElementPosition
+    target: ElementPosition
+  }
+  onAlignEnd?: () => void
+}
 
 type Position = 'top' | 'left' | 'right' | 'bottom'
 type Alignment = 'center' | 'start' | 'end'
 
-class Popper {
+export function createPopper(anchor: HTMLElement, target: HTMLElement) {
+  return new _Popper(anchor, target) as unknown as Popper
+}
+
+export interface Popper {
+  use(plug: Plugin): void
+  move(position?: Position, alignment?: Alignment): Popper
+  decorate(name: string, fn: (...args: unknown[]) => void): Popper
+  offset(num: number): Popper
+  align(): void
+}
+
+// @ts-expect-error plugins are in the same folder
+// that'll cause method missing errors even when plugins
+// aren't imported
+class _Popper implements Popper {
   anchor: HTMLElement
   target: HTMLElement
   _position: Position = 'bottom'
@@ -31,62 +57,110 @@ class Popper {
 
   use(plug: Plugin) {
     this._plugins.push(plug)
+    plug.setup?.(this as unknown as Popper, this.anchor, this.target)
   }
 
   move(position: Position = 'bottom', alignment: Alignment = 'center') {
     this._position = position
     this._alignment = alignment
-    return this
+    return this as unknown as Popper
+  }
+
+  decorate(name: string, fn: (...args: unknown[]) => void) {
+    if (Object.prototype.hasOwnProperty.call(this, name)) {
+      console.warn(`tried to define ${name} again`)
+      return
+    }
+    Object.defineProperty(this, name, {
+      value: fn,
+    })
+    return this as unknown as Popper
   }
 
   offset(num: number) {
     this._offset = num
-    return this
+    return this as unknown as Popper
   }
 
   align() {
+    const anchorBox = this.anchor.getBoundingClientRect()
+    const targetBox = this.target.getBoundingClientRect()
     this.target.style.position = 'absolute'
-    _alignElement(
-      this.anchor,
-      this.target,
+    const targetPosition = _computeTargetPosition(
+      {
+        left: anchorBox.left,
+        top: anchorBox.top,
+        height: anchorBox.height,
+        width: anchorBox.width,
+      },
+      {
+        left: targetBox.left,
+        top: targetBox.top,
+        height: targetBox.height,
+        width: targetBox.width,
+      },
       this._alignment,
       this._position,
       this._offset
     )
-    this._plugins.forEach(d =>
-      d(this.anchor, this.target, {
-        position: this._position,
-        alignment: this._alignment,
-      })
+    const finalPosition = this._plugins.reduce(
+      (acc, plugin) =>
+        !plugin.onAlign
+          ? acc
+          : plugin.onAlign(
+              acc.anchor,
+              acc.target,
+              {
+                alignment: this._alignment,
+                position: this._position,
+              },
+              this as unknown as Popper
+            ),
+      {
+        anchor: {
+          left: anchorBox.left,
+          top: anchorBox.top,
+          height: anchorBox.height,
+          width: anchorBox.width,
+        },
+        target: targetPosition,
+      }
     )
+    this.target.style.top = finalPosition.target.top + 'px'
+    this.target.style.left = finalPosition.target.left + 'px'
+    this._plugins.forEach(d => d.onAlignEnd?.())
   }
 }
 
-function _alignElement(
-  anchor: HTMLElement,
-  target: HTMLElement,
+function _computeTargetPosition(
+  anchorBox: ElementPosition,
+  targetBox: ElementPosition,
   align: Alignment,
   position: Position,
   offset: number = 0
 ) {
-  const box = anchor.getBoundingClientRect()
-  const targetBox = target.getBoundingClientRect()
+  const targetPosition: ElementPosition = {
+    top: targetBox.top,
+    left: targetBox.left,
+    height: targetBox.height,
+    width: targetBox.width,
+  }
 
   switch (position) {
     case 'top': {
-      target.style.top = anchor.offsetTop - targetBox.height - offset + 'px'
+      targetPosition.top = anchorBox.top - targetBox.height - offset
       break
     }
     case 'bottom': {
-      target.style.top = anchor.offsetTop + box.height + offset + 'px'
+      targetPosition.top = anchorBox.top + anchorBox.height + offset
       break
     }
     case 'left': {
-      target.style.left = box.x - targetBox.width - offset + 'px'
+      targetPosition.left = anchorBox.left - targetBox.width - offset
       break
     }
     case 'right': {
-      target.style.left = box.x + box.width + offset + 'px'
+      targetPosition.left = anchorBox.left + anchorBox.width + offset
       break
     }
   }
@@ -94,34 +168,35 @@ function _alignElement(
   switch (align) {
     case 'start': {
       if (position === 'top' || position === 'bottom') {
-        target.style.left = anchor.offsetLeft + 'px'
+        targetPosition.left = anchorBox.left
       }
       if (position === 'left' || position === 'right') {
-        target.style.top = anchor.offsetTop + 'px'
+        targetPosition.top = anchorBox.top
       }
       break
     }
     case 'center': {
       if (position === 'top' || position === 'bottom') {
-        target.style.left =
-          anchor.offsetLeft - (targetBox.width / 2 - box.width / 2) + 'px'
+        targetPosition.left =
+          anchorBox.left - (targetBox.width / 2 - anchorBox.width / 2)
       }
       if (position === 'left' || position === 'right') {
-        target.style.top =
-          anchor.offsetTop + (box.height / 2 - targetBox.height / 2) + 'px'
+        targetPosition.top =
+          anchorBox.top + (anchorBox.height / 2 - targetBox.height / 2)
       }
       break
     }
     case 'end': {
       if (position === 'top' || position === 'bottom') {
-        target.style.left =
-          anchor.offsetLeft + box.width - targetBox.width + 'px'
+        targetPosition.left = anchorBox.left + anchorBox.width - targetBox.width
       }
       if (position === 'left' || position === 'right') {
-        target.style.top =
-          anchor.offsetTop + (box.height - targetBox.height) + 'px'
+        targetPosition.top =
+          anchorBox.top + (anchorBox.height - targetBox.height)
       }
       break
     }
   }
+
+  return targetPosition
 }
