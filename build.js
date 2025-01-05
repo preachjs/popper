@@ -2,8 +2,7 @@ import path, { basename, extname, join } from 'node:path'
 import { parseArgs } from 'node:util'
 import chokidar from 'chokidar'
 import { analyzeMetafile, context } from 'esbuild'
-import dtsPkg from 'npm-dts'
-const { Generator } = dtsPkg
+import { dtsPlugin } from 'esbuild-plugin-d.ts'
 
 const flag = parseArgs({
   options: {
@@ -29,6 +28,7 @@ async function createBuilder(input, output, serveDir) {
     format: 'esm',
     metafile: true,
     plugins: [
+      dtsPlugin(),
       {
         name: 'watch-graph',
         setup(builder) {
@@ -44,14 +44,6 @@ async function createBuilder(input, output, serveDir) {
   async function generateBundle() {
     const buildOut = await ctx.rebuild()
     console.log(await analyzeMetafile(buildOut.metafile))
-    const baseFile = input[0]
-    await new Generator({
-      entry: baseFile,
-      output: path.join(
-        output,
-        basename(baseFile).replace(extname(baseFile), '.d.ts')
-      ),
-    }).generate()
   }
 
   if (watch) {
