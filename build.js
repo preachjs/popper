@@ -1,4 +1,4 @@
-import path, { basename, extname, join } from 'node:path'
+import path, { join } from 'node:path'
 import { parseArgs } from 'node:util'
 import chokidar from 'chokidar'
 import { analyzeMetafile, context } from 'esbuild'
@@ -30,6 +30,8 @@ async function createBuilder(input, output, serveDir) {
     bundle: true,
     outdir: output,
     format: 'esm',
+    mangleProps: /^_/,
+    minifySyntax: true,
     metafile: true,
     plugins: [
       dtsPlugin(),
