@@ -7,9 +7,12 @@ declare module '@preachjs/popper' {
   }
 }
 
-export const arrow = (arrowEl?: HTMLElement): Plugin => {
+export const arrow = (arrowEl: HTMLElement): Plugin => {
   let visible = 1
   let finalPosition: ElementPosition
+  if (!arrowEl) {
+    throw new Error('[popper] Expected arrow element to be passed')
+  }
   return {
     setup(popper, anchor, target) {
       popper.decorate('toggleArrow', (bool: boolean) => {
@@ -39,8 +42,8 @@ export const arrow = (arrowEl?: HTMLElement): Plugin => {
       return { target: targetPosition, anchor: anchorPosition }
     },
     onAlignEnd() {
-      console.log({ finalPosition })
       if (!finalPosition) return
+      if (!arrowEl) return
       arrowEl.style.position = 'absolute'
       arrowEl.style.transform = finalPosition.transform as string
       arrowEl.style.top = finalPosition.top + 'px'
